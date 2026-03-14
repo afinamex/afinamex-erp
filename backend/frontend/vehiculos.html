@@ -22,13 +22,16 @@ font-size:22px;
 
 .container{
 padding:30px;
+max-width:900px;
+margin:auto;
 }
 
 input{
 width:100%;
 padding:10px;
 margin-top:10px;
-margin-bottom:20px;
+margin-bottom:15px;
+border:1px solid #ccc;
 }
 
 button{
@@ -43,6 +46,24 @@ button:hover{
 background:#333;
 }
 
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:30px;
+background:white;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+th{
+background:#222;
+color:white;
+}
+
 </style>
 
 </head>
@@ -50,29 +71,38 @@ background:#333;
 <body>
 
 <header>
-Registro de Vehículos | ERP Afinamex
+ERP AFINAMEX | Registro de Vehículos
 </header>
 
 <div class="container">
 
-<h2>Registrar vehículo</h2>
+<h2>Registrar Vehículo</h2>
 
-<label>Número de unidad</label>
-<input id="unidad" type="text" placeholder="Ej: TMX-2381">
-
-<label>Marca</label>
-<input id="marca" type="text" placeholder="Nissan">
-
-<label>Modelo</label>
-<input id="modelo" type="text" placeholder="NP300">
-
-<label>Año</label>
-<input id="anio" type="number" placeholder="2022">
-
-<label>Placas</label>
-<input id="placas" type="text" placeholder="ABC-123">
+<input id="unidad" type="text" placeholder="Número de unidad (TMX-2381)">
+<input id="marca" type="text" placeholder="Marca (Nissan)">
+<input id="modelo" type="text" placeholder="Modelo (NP300)">
+<input id="anio" type="number" placeholder="Año (2022)">
+<input id="placas" type="text" placeholder="Placas (ABC123)">
 
 <button onclick="guardarVehiculo()">Guardar Vehículo</button>
+
+<h2>Vehículos registrados</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Unidad</th>
+<th>Marca</th>
+<th>Modelo</th>
+<th>Año</th>
+<th>Placas</th>
+</tr>
+</thead>
+
+<tbody id="tablaVehiculos"></tbody>
+
+</table>
 
 </div>
 
@@ -107,7 +137,49 @@ const data = await respuesta.json()
 
 alert(data.mensaje)
 
+limpiarFormulario()
+
+cargarVehiculos()
+
 }
+
+function limpiarFormulario(){
+
+document.getElementById("unidad").value=""
+document.getElementById("marca").value=""
+document.getElementById("modelo").value=""
+document.getElementById("anio").value=""
+document.getElementById("placas").value=""
+
+}
+
+async function cargarVehiculos(){
+
+const respuesta = await fetch("http://localhost:3000/vehiculos")
+
+const vehiculos = await respuesta.json()
+
+const tabla = document.getElementById("tablaVehiculos")
+
+tabla.innerHTML=""
+
+vehiculos.forEach(v=>{
+
+tabla.innerHTML += `
+<tr>
+<td>${v.numero_unidad}</td>
+<td>${v.marca}</td>
+<td>${v.modelo}</td>
+<td>${v.anio}</td>
+<td>${v.placas}</td>
+</tr>
+`
+
+})
+
+}
+
+cargarVehiculos()
 
 </script>
 
