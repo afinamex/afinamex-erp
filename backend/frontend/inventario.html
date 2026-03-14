@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Inventario - ERP Afinamex</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+margin:0;
+}
+
+header{
+background:#000;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.container{
+padding:30px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+}
+
+button{
+background:#000;
+color:white;
+padding:12px;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#333;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+margin-top:20px;
+}
+
+th, td{
+padding:12px;
+border-bottom:1px solid #ddd;
+}
+
+th{
+background:#222;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+Inventario | ERP Afinamex
+</header>
+
+<div class="container">
+
+<h2>Registrar Refacción</h2>
+
+<label>Nombre de refacción</label>
+<input type="text" placeholder="Ej: Amortiguador NP300">
+
+<label>Precio</label>
+<input type="number" placeholder="0.00">
+
+<label>Stock</label>
+<input type="number" placeholder="0">
+
+<button>Guardar Refacción</button>
+
+<h2>Inventario actual</h2>
+
+<table>
+
+<tr>
+<th>Refacción</th>
+<th>Precio</th>
+<th>Stock</th>
+</tr>
+
+<tr>
+<td>Amortiguador NP300</td>
+<td>$1,850</td>
+<td>12</td>
+</tr>
+
+<tr>
+<td>Balatas delanteras</td>
+<td>$950</td>
+<td>20</td>
+</tr>
+
+</table>
+
+</div>
+
+</body>
+
+</html>
