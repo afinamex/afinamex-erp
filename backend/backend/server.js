@@ -11,6 +11,27 @@ const express = require("express")
 const app = express()
 
 app.use(express.json())
+app.post("/vehiculos", async (req,res)=>{
+
+const {numero_unidad, marca, modelo, anio, placas} = req.body
+
+try{
+
+await pool.query(
+"INSERT INTO vehiculos(numero_unidad,marca,modelo,anio,placas) VALUES($1,$2,$3,$4,$5)",
+[numero_unidad,marca,modelo,anio,placas]
+)
+
+res.json({mensaje:"Vehiculo guardado"})
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al guardar vehiculo"})
+
+}
+
+})
 
 app.get("/", (req,res)=>{
 res.send("ERP Afinamex funcionando")
