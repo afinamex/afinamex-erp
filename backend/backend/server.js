@@ -167,6 +167,51 @@ res.status(500).json({error:"Error al obtener inventario"})
 })
 
 /* -------------------------
+COTIZACIONES
+------------------------- */
+
+app.post("/cotizaciones", async (req,res)=>{
+
+const {vehiculo, descripcion, total} = req.body
+
+try{
+
+await pool.query(
+"INSERT INTO cotizaciones(vehiculo,descripcion,total) VALUES($1,$2,$3)",
+[vehiculo,descripcion,total]
+)
+
+res.json({mensaje:"Cotización guardada"})
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al guardar cotización"})
+
+}
+
+})
+
+app.get("/cotizaciones", async (req,res)=>{
+
+try{
+
+const resultado = await pool.query(
+"SELECT * FROM cotizaciones ORDER BY id DESC"
+)
+
+res.json(resultado.rows)
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al obtener cotizaciones"})
+
+}
+
+})
+
+/* -------------------------
 PUERTO
 ------------------------- */
 
