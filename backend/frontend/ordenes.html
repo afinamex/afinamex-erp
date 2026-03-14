@@ -2,8 +2,9 @@
 <html lang="es">
 
 <head>
+
 <meta charset="UTF-8">
-<title>Órdenes de Trabajo - ERP Afinamex</title>
+<title>Órdenes de Trabajo | ERP Afinamex</title>
 
 <style>
 
@@ -14,25 +15,27 @@ margin:0;
 }
 
 header{
-background:#000;
+background:black;
 color:white;
 padding:20px;
 font-size:22px;
 }
 
 .container{
+max-width:900px;
+margin:auto;
 padding:30px;
 }
 
-input, select{
+input,select{
 width:100%;
 padding:10px;
-margin-top:10px;
-margin-bottom:20px;
+margin-bottom:15px;
+border:1px solid #ccc;
 }
 
 button{
-background:#000;
+background:black;
 color:white;
 padding:12px;
 border:none;
@@ -46,13 +49,14 @@ background:#333;
 table{
 width:100%;
 border-collapse:collapse;
+margin-top:30px;
 background:white;
-margin-top:20px;
 }
 
-th, td{
-padding:12px;
+th,td{
+padding:10px;
 border-bottom:1px solid #ddd;
+text-align:left;
 }
 
 th{
@@ -67,57 +71,131 @@ color:white;
 <body>
 
 <header>
-Órdenes de Trabajo | ERP Afinamex
+ERP AFINAMEX | Órdenes de trabajo
 </header>
 
 <div class="container">
 
-<h2>Nueva Orden de Trabajo</h2>
+<h2>Nueva Orden</h2>
 
 <label>Vehículo</label>
-<input type="text" placeholder="Ej: TMX-2381">
+<select id="vehiculo"></select>
 
 <label>Servicio</label>
-<input type="text" placeholder="Ej: Cambio de frenos">
+<input id="servicio" placeholder="Ej: Afinación mayor">
 
-<label>Refacción utilizada</label>
-<input type="text" placeholder="Ej: Balatas delanteras">
+<label>Costo</label>
+<input id="costo" placeholder="3500">
 
-<label>Total</label>
-<input type="number" placeholder="0.00">
-
-<label>Estatus</label>
-<select>
-<option>En proceso</option>
-<option>Terminado</option>
-<option>Entregado</option>
+<label>Estado</label>
+<select id="estado">
+<option value="Pendiente">Pendiente</option>
+<option value="En proceso">En proceso</option>
+<option value="Finalizado">Finalizado</option>
 </select>
 
-<button>Guardar Orden</button>
+<button onclick="crearOrden()">Crear Orden</button>
 
 <h2>Órdenes registradas</h2>
 
 <table>
 
+<thead>
 <tr>
-<th># Orden</th>
-<th>Vehículo</th>
+<th>Unidad</th>
 <th>Servicio</th>
-<th>Total</th>
-<th>Estatus</th>
+<th>Costo</th>
+<th>Estado</th>
 </tr>
+</thead>
 
-<tr>
-<td>1045</td>
-<td>TMX-2381</td>
-<td>Cambio de frenos</td>
-<td>$3,450</td>
-<td>En proceso</td>
-</tr>
+<tbody id="tablaOrdenes"></tbody>
 
 </table>
 
 </div>
+
+<script>
+
+async function cargarVehiculos(){
+
+const res = await fetch("http://localhost:3000/vehiculos")
+const vehiculos = await res.json()
+
+const select = document.getElementById("vehiculo")
+
+select.innerHTML=""
+
+vehiculos.forEach(v=>{
+
+select.innerHTML += `
+<option value="${v.id}">
+${v.numero_unidad} - ${v.marca}
+</option>
+`
+
+})
+
+}
+
+async function crearOrden(){
+
+const vehiculo_id = document.getElementById("vehiculo").value
+const servicio = document.getElementById("servicio").value
+const costo = document.getElementById("costo").value
+const estado = document.getElementById("estado").value
+
+await fetch("http://localhost:3000/ordenes",{
+
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+vehiculo_id,
+servicio,
+costo,
+estado
+})
+
+})
+
+document.getElementById("servicio").value=""
+document.getElementById("costo").value=""
+
+cargarOrdenes()
+
+}
+
+async function cargarOrdenes(){
+
+const res = await fetch("http://localhost:3000/ordenes")
+const ordenes = await res.json()
+
+const tabla = document.getElementById("tablaOrdenes")
+
+tabla.innerHTML=""
+
+ordenes.forEach(o=>{
+
+tabla.innerHTML += `
+<tr>
+<td>${o.numero_unidad}</td>
+<td>${o.servicio}</td>
+<td>$${o.costo}</td>
+<td>${o.estado}</td>
+</tr>
+`
+
+})
+
+}
+
+cargarVehiculos()
+cargarOrdenes()
+
+</script>
 
 </body>
 
