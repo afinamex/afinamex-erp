@@ -2,8 +2,9 @@
 <html lang="es">
 
 <head>
+
 <meta charset="UTF-8">
-<title>Inventario - ERP Afinamex</title>
+<title>Inventario | ERP Afinamex</title>
 
 <style>
 
@@ -14,25 +15,27 @@ margin:0;
 }
 
 header{
-background:#000;
+background:black;
 color:white;
 padding:20px;
 font-size:22px;
 }
 
 .container{
+max-width:900px;
+margin:auto;
 padding:30px;
 }
 
 input{
 width:100%;
 padding:10px;
-margin-top:10px;
-margin-bottom:20px;
+margin-bottom:15px;
+border:1px solid #ccc;
 }
 
 button{
-background:#000;
+background:black;
 color:white;
 padding:12px;
 border:none;
@@ -46,12 +49,12 @@ background:#333;
 table{
 width:100%;
 border-collapse:collapse;
+margin-top:30px;
 background:white;
-margin-top:20px;
 }
 
-th, td{
-padding:12px;
+th,td{
+padding:10px;
 border-bottom:1px solid #ddd;
 }
 
@@ -67,50 +70,96 @@ color:white;
 <body>
 
 <header>
-Inventario | ERP Afinamex
+ERP AFINAMEX | Inventario
 </header>
 
 <div class="container">
 
-<h2>Registrar Refacción</h2>
+<h2>Agregar producto</h2>
 
-<label>Nombre de refacción</label>
-<input type="text" placeholder="Ej: Amortiguador NP300">
+<input id="nombre" placeholder="Ej: Aceite 5W30">
 
-<label>Precio</label>
-<input type="number" placeholder="0.00">
+<input id="stock" placeholder="Cantidad">
 
-<label>Stock</label>
-<input type="number" placeholder="0">
+<input id="precio" placeholder="Precio">
 
-<button>Guardar Refacción</button>
+<button onclick="guardarProducto()">Guardar</button>
 
-<h2>Inventario actual</h2>
+<h2>Inventario</h2>
 
 <table>
 
+<thead>
 <tr>
-<th>Refacción</th>
-<th>Precio</th>
+<th>Producto</th>
 <th>Stock</th>
+<th>Precio</th>
 </tr>
+</thead>
 
-<tr>
-<td>Amortiguador NP300</td>
-<td>$1,850</td>
-<td>12</td>
-</tr>
-
-<tr>
-<td>Balatas delanteras</td>
-<td>$950</td>
-<td>20</td>
-</tr>
+<tbody id="tablaInventario"></tbody>
 
 </table>
 
 </div>
 
-</body>
+<script>
 
+async function guardarProducto(){
+
+const nombre = document.getElementById("nombre").value
+const stock = document.getElementById("stock").value
+const precio = document.getElementById("precio").value
+
+await fetch("http://localhost:3000/inventario",{
+
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nombre,
+stock,
+precio
+})
+
+})
+
+document.getElementById("nombre").value=""
+document.getElementById("stock").value=""
+document.getElementById("precio").value=""
+
+cargarInventario()
+
+}
+
+async function cargarInventario(){
+
+const res = await fetch("http://localhost:3000/inventario")
+const productos = await res.json()
+
+const tabla = document.getElementById("tablaInventario")
+
+tabla.innerHTML=""
+
+productos.forEach(p=>{
+
+tabla.innerHTML += `
+<tr>
+<td>${p.nombre}</td>
+<td>${p.stock}</td>
+<td>$${p.precio}</td>
+</tr>
+`
+
+})
+
+}
+
+cargarInventario()
+
+</script>
+
+</body>
 </html>
