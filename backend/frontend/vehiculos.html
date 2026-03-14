@@ -72,9 +72,44 @@ Registro de Vehículos | ERP Afinamex
 <label>Placas</label>
 <input type="text" placeholder="ABC-123">
 
-<button>Guardar Vehículo</button>
+<button onclick="guardarVehiculo()">Guardar Vehículo</button>
 
 </div>
+
+<script>
+
+async function guardarVehiculo(){
+
+const numero_unidad = document.querySelector("input[placeholder='Ej: TMX-2381']").value
+const marca = document.querySelector("input[placeholder='Nissan']").value
+const modelo = document.querySelector("input[placeholder='NP300']").value
+const anio = document.querySelector("input[placeholder='2022']").value
+const placas = document.querySelector("input[placeholder='ABC-123']").value
+
+const respuesta = await fetch("http://localhost:3000/vehiculos",{
+
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+numero_unidad,
+marca,
+modelo,
+anio,
+placas
+})
+
+})
+
+const data = await respuesta.json()
+
+alert(data.mensaje)
+
+}
+
+</script>  
 
 </body>
 
