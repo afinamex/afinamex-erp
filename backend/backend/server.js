@@ -16,7 +16,7 @@ port:5432
 })
 
 /* -------------------------
-   SERVIDOR FUNCIONANDO
+SERVIDOR
 ------------------------- */
 
 app.get("/", (req,res)=>{
@@ -24,7 +24,7 @@ res.send("ERP Afinamex funcionando")
 })
 
 /* -------------------------
-   VEHICULOS
+VEHICULOS
 ------------------------- */
 
 app.post("/vehiculos", async (req,res)=>{
@@ -69,7 +69,7 @@ res.status(500).json({error:"Error al obtener vehiculos"})
 })
 
 /* -------------------------
-   ORDENES DE TRABAJO
+ORDENES
 ------------------------- */
 
 app.post("/ordenes", async (req,res)=>{
@@ -122,7 +122,52 @@ res.status(500).json({error:"Error al obtener ordenes"})
 })
 
 /* -------------------------
-   PUERTO SERVIDOR
+INVENTARIO
+------------------------- */
+
+app.post("/inventario", async (req,res)=>{
+
+const {nombre, stock, precio} = req.body
+
+try{
+
+await pool.query(
+"INSERT INTO inventario(nombre,stock,precio) VALUES($1,$2,$3)",
+[nombre,stock,precio]
+)
+
+res.json({mensaje:"Producto agregado al inventario"})
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al guardar producto"})
+
+}
+
+})
+
+app.get("/inventario", async (req,res)=>{
+
+try{
+
+const resultado = await pool.query(
+"SELECT * FROM inventario ORDER BY id DESC"
+)
+
+res.json(resultado.rows)
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al obtener inventario"})
+
+}
+
+})
+
+/* -------------------------
+PUERTO
 ------------------------- */
 
 app.listen(3000,()=>{
