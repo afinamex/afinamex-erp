@@ -2,8 +2,9 @@
 <html lang="es">
 
 <head>
+
 <meta charset="UTF-8">
-<title>Cotizaciones - ERP Afinamex</title>
+<title>Cotizaciones | ERP Afinamex</title>
 
 <style>
 
@@ -14,33 +15,48 @@ margin:0;
 }
 
 header{
-background:#000;
+background:black;
 color:white;
 padding:20px;
 font-size:22px;
 }
 
 .container{
+max-width:900px;
+margin:auto;
 padding:30px;
 }
 
-input, textarea{
+input,textarea{
 width:100%;
 padding:10px;
-margin-top:10px;
-margin-bottom:20px;
+margin-bottom:15px;
+border:1px solid #ccc;
 }
 
 button{
-background:#000;
+background:black;
 color:white;
 padding:12px;
 border:none;
 cursor:pointer;
 }
 
-button:hover{
-background:#333;
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:30px;
+background:white;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+th{
+background:#222;
+color:white;
 }
 
 </style>
@@ -50,26 +66,92 @@ background:#333;
 <body>
 
 <header>
-Cotizaciones | ERP Afinamex
+ERP AFINAMEX | Cotizaciones
 </header>
 
 <div class="container">
 
 <h2>Nueva Cotización</h2>
 
-<label>Vehículo</label>
-<input type="text" placeholder="Ej: NP300 TELMEX 2381">
+<input id="vehiculo" placeholder="Vehículo">
 
-<label>Descripción del servicio</label>
-<textarea placeholder="Cambio de frenos, amortiguadores..."></textarea>
+<textarea id="descripcion" placeholder="Descripción del servicio"></textarea>
 
-<label>Total</label>
-<input type="number" placeholder="0.00">
+<input id="total" placeholder="Total">
 
-<button>Guardar Cotización</button>
+<button onclick="guardarCotizacion()">Guardar</button>
+
+<h2>Cotizaciones registradas</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Vehículo</th>
+<th>Descripción</th>
+<th>Total</th>
+</tr>
+</thead>
+
+<tbody id="tablaCotizaciones"></tbody>
+
+</table>
 
 </div>
 
-</body>
+<script>
 
+async function guardarCotizacion(){
+
+const vehiculo = document.getElementById("vehiculo").value
+const descripcion = document.getElementById("descripcion").value
+const total = document.getElementById("total").value
+
+await fetch("http://localhost:3000/cotizaciones",{
+
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+vehiculo,
+descripcion,
+total
+})
+
+})
+
+cargarCotizaciones()
+
+}
+
+async function cargarCotizaciones(){
+
+const res = await fetch("http://localhost:3000/cotizaciones")
+const cotizaciones = await res.json()
+
+const tabla = document.getElementById("tablaCotizaciones")
+
+tabla.innerHTML=""
+
+cotizaciones.forEach(c=>{
+
+tabla.innerHTML += `
+<tr>
+<td>${c.vehiculo}</td>
+<td>${c.descripcion}</td>
+<td>$${c.total}</td>
+</tr>
+`
+
+})
+
+}
+
+cargarCotizaciones()
+
+</script>
+
+</body>
 </html>
