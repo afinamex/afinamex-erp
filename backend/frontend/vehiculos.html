@@ -58,19 +58,19 @@ Registro de Vehículos | ERP Afinamex
 <h2>Registrar vehículo</h2>
 
 <label>Número de unidad</label>
-<input type="text" placeholder="Ej: TMX-2381">
+<input id="unidad" type="text" placeholder="Ej: TMX-2381">
 
 <label>Marca</label>
-<input type="text" placeholder="Nissan">
+<input id="marca" type="text" placeholder="Nissan">
 
 <label>Modelo</label>
-<input type="text" placeholder="NP300">
+<input id="modelo" type="text" placeholder="NP300">
 
 <label>Año</label>
-<input type="number" placeholder="2022">
+<input id="anio" type="number" placeholder="2022">
 
 <label>Placas</label>
-<input type="text" placeholder="ABC-123">
+<input id="placas" type="text" placeholder="ABC-123">
 
 <button onclick="guardarVehiculo()">Guardar Vehículo</button>
 
@@ -80,11 +80,11 @@ Registro de Vehículos | ERP Afinamex
 
 async function guardarVehiculo(){
 
-const numero_unidad = document.querySelector("input[placeholder='Ej: TMX-2381']").value
-const marca = document.querySelector("input[placeholder='Nissan']").value
-const modelo = document.querySelector("input[placeholder='NP300']").value
-const anio = document.querySelector("input[placeholder='2022']").value
-const placas = document.querySelector("input[placeholder='ABC-123']").value
+const numero_unidad = document.getElementById("unidad").value
+const marca = document.getElementById("marca").value
+const modelo = document.getElementById("modelo").value
+const anio = document.getElementById("anio").value
+const placas = document.getElementById("placas").value
 
 const respuesta = await fetch("http://localhost:3000/vehiculos",{
 
@@ -109,8 +109,7 @@ alert(data.mensaje)
 
 }
 
-</script>  
+</script>
 
 </body>
-
 </html>
