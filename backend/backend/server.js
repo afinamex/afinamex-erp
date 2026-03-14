@@ -1,5 +1,5 @@
 const express = require("express")
-const {Pool} = require("pg")
+const { Pool } = require("pg")
 const cors = require("cors")
 
 const app = express()
@@ -15,9 +15,17 @@ password:"1234",
 port:5432
 })
 
+/* -------------------------
+   SERVIDOR FUNCIONANDO
+------------------------- */
+
 app.get("/", (req,res)=>{
-res.send("Servidor ERP Afinamex funcionando")
+res.send("ERP Afinamex funcionando")
 })
+
+/* -------------------------
+   VEHICULOS
+------------------------- */
 
 app.post("/vehiculos", async (req,res)=>{
 
@@ -45,7 +53,9 @@ app.get("/vehiculos", async (req,res)=>{
 
 try{
 
-const resultado = await pool.query("SELECT * FROM vehiculos ORDER BY id DESC")
+const resultado = await pool.query(
+"SELECT * FROM vehiculos ORDER BY id DESC"
+)
 
 res.json(resultado.rows)
 
@@ -58,6 +68,63 @@ res.status(500).json({error:"Error al obtener vehiculos"})
 
 })
 
+/* -------------------------
+   ORDENES DE TRABAJO
+------------------------- */
+
+app.post("/ordenes", async (req,res)=>{
+
+const {vehiculo_id, servicio, costo, estado} = req.body
+
+try{
+
+await pool.query(
+"INSERT INTO historial_servicios(vehiculo_id,servicio,costo,estado) VALUES($1,$2,$3,$4)",
+[vehiculo_id,servicio,costo,estado]
+)
+
+res.json({mensaje:"Orden creada correctamente"})
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al crear orden"})
+
+}
+
+})
+
+app.get("/ordenes", async (req,res)=>{
+
+try{
+
+const resultado = await pool.query(`
+SELECT 
+h.id,
+v.numero_unidad,
+h.servicio,
+h.costo,
+h.estado
+FROM historial_servicios h
+JOIN vehiculos v ON v.id = h.vehiculo_id
+ORDER BY h.id DESC
+`)
+
+res.json(resultado.rows)
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al obtener ordenes"})
+
+}
+
+})
+
+/* -------------------------
+   PUERTO SERVIDOR
+------------------------- */
+
 app.listen(3000,()=>{
-console.log("Servidor ERP corriendo en puerto 3000")
+console.log("Servidor ERP Afinamex corriendo en puerto 3000")
 })
