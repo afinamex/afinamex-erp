@@ -15,6 +15,13 @@ CREATE TABLE vehiculos (
  placas VARCHAR(20)
 );
 
+CREATE TABLE historial_servicios (
+ id SERIAL PRIMARY KEY,
+ vehiculo_id INTEGER,
+ fecha DATE,
+ descripcion TEXT
+);
+
 CREATE TABLE cotizaciones (
  id SERIAL PRIMARY KEY,
  vehiculo_id INTEGER,
@@ -23,9 +30,9 @@ CREATE TABLE cotizaciones (
  total DECIMAL
 );
 
-CREATE TABLE historial_servicios (
+CREATE TABLE inventario (
  id SERIAL PRIMARY KEY,
- vehiculo_id INTEGER,
- fecha DATE,
- descripcion TEXT
+ nombre VARCHAR(100),
+ stock INTEGER,
+ precio DECIMAL
 );
