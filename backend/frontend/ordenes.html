@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<title>Órdenes de Trabajo - ERP Afinamex</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f9;
+margin:0;
+}
+
+header{
+background:#000;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.container{
+padding:30px;
+}
+
+input, select{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
+}
+
+button{
+background:#000;
+color:white;
+padding:12px;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#333;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+margin-top:20px;
+}
+
+th, td{
+padding:12px;
+border-bottom:1px solid #ddd;
+}
+
+th{
+background:#222;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+Órdenes de Trabajo | ERP Afinamex
+</header>
+
+<div class="container">
+
+<h2>Nueva Orden de Trabajo</h2>
+
+<label>Vehículo</label>
+<input type="text" placeholder="Ej: TMX-2381">
+
+<label>Servicio</label>
+<input type="text" placeholder="Ej: Cambio de frenos">
+
+<label>Refacción utilizada</label>
+<input type="text" placeholder="Ej: Balatas delanteras">
+
+<label>Total</label>
+<input type="number" placeholder="0.00">
+
+<label>Estatus</label>
+<select>
+<option>En proceso</option>
+<option>Terminado</option>
+<option>Entregado</option>
+</select>
+
+<button>Guardar Orden</button>
+
+<h2>Órdenes registradas</h2>
+
+<table>
+
+<tr>
+<th># Orden</th>
+<th>Vehículo</th>
+<th>Servicio</th>
+<th>Total</th>
+<th>Estatus</th>
+</tr>
+
+<tr>
+<td>1045</td>
+<td>TMX-2381</td>
+<td>Cambio de frenos</td>
+<td>$3,450</td>
+<td>En proceso</td>
+</tr>
+
+</table>
+
+</div>
+
+</body>
+
+</html>
