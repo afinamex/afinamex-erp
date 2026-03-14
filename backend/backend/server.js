@@ -1,4 +1,11 @@
+const express = require("express")
 const {Pool} = require("pg")
+const cors = require("cors")
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
 
 const pool = new Pool({
 user:"postgres",
@@ -7,10 +14,11 @@ database:"afinamex",
 password:"1234",
 port:5432
 })
-const express = require("express")
-const app = express()
 
-app.use(express.json())
+app.get("/", (req,res)=>{
+res.send("Servidor ERP Afinamex funcionando")
+})
+
 app.post("/vehiculos", async (req,res)=>{
 
 const {numero_unidad, marca, modelo, anio, placas} = req.body
@@ -22,7 +30,7 @@ await pool.query(
 [numero_unidad,marca,modelo,anio,placas]
 )
 
-res.json({mensaje:"Vehiculo guardado"})
+res.json({mensaje:"Vehiculo guardado correctamente"})
 
 }catch(error){
 
@@ -33,18 +41,21 @@ res.status(500).json({error:"Error al guardar vehiculo"})
 
 })
 
-app.get("/", (req,res)=>{
-res.send("ERP Afinamex funcionando")
-})
+app.get("/vehiculos", async (req,res)=>{
 
-app.get("/vehiculos",(req,res)=>{
-res.json([
-{
-unidad:"TMX-2381",
-marca:"Nissan",
-modelo:"NP300"
+try{
+
+const resultado = await pool.query("SELECT * FROM vehiculos ORDER BY id DESC")
+
+res.json(resultado.rows)
+
+}catch(error){
+
+console.error(error)
+res.status(500).json({error:"Error al obtener vehiculos"})
+
 }
-])
+
 })
 
 app.listen(3000,()=>{
